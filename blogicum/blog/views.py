@@ -77,4 +77,3 @@ def category_posts(request, category_slug):
         raise Http404('Категория не найдена')
     context = {'category': category_slug, 'posts': sorted_posts}
     return render(request, 'blog/category.html', context)
-
