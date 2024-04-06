@@ -68,7 +68,7 @@ def post_detail(request, id):
 
 def category_posts(request, category_slug):
     """Отображение публикаций категории"""
-    sorted_posts = [post for post in posts_dict.values() if post['category'] 
+    sorted_posts = [post for post in posts_dict.values() if post['category']
                     == category_slug]
     context = {'category': category_slug, 'posts': sorted_posts}
     return render(request, 'blog/category.html', context)
