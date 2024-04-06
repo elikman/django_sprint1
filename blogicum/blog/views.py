@@ -2,8 +2,6 @@ from django.shortcuts import render
 
 from django.http import Http404
 
-from collections import defaultdict
-
 posts = [
     {
         'id': 0,
@@ -50,30 +48,26 @@ posts = [
 posts_dict = {post['id']: post for post in posts}
 
 
-category_dict = defaultdict(list)
-for post in posts:
-    category_dict[post['category']].append(post)
-
-
 def index(request):
     """Главная страница / Лента записей"""
-    context = {'posts': posts}
+    posts_reversed = list(reversed(posts))
+    context = {'posts': posts_reversed}
     return render(request, 'blog/index.html', context)
 
 
 def post_detail(request, id):
     """Отображение полного описания выбранной записи"""
-    post = posts_dict.get(id)
-    if not post:
+    try:
+        post = posts_dict[id]
+    except KeyError:
         raise Http404('Вы указали неверный id')
+
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
     """Отображение публикаций категории"""
-    sorted_posts = category_dict.get(category_slug)
-    if not sorted_posts:
-        raise Http404('Категория не найдена')
+    sorted_posts = [post for post in posts_dict.values() if post['category'] == category_slug]
     context = {'category': category_slug, 'posts': sorted_posts}
     return render(request, 'blog/category.html', context)
