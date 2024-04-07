@@ -2,5 +2,5 @@
 {% load static %}
 {% block title %} {{ post.location }}. {{ post.date }} {% endblock %}
 {% block content %}
-  {% include "_post.html" with full_text=True %}
+  {% include "includes/_post.html" with post=post full_text=True %}
 {% endblock %}
