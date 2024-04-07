@@ -8,7 +8,7 @@
   </ul>
   <p>
     {% if full_text %}
-      {{ post.text|linenumbers }}
+      {{ post.text|linebreaksbr }}
     {% else %}
       {{ post.text|truncatewords:30 }}
     {% endif %}
