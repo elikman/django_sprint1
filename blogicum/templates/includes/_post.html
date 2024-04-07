@@ -11,9 +11,7 @@
       {{ post.text|linebreaksbr }}
     {% else %}
       {{ post.text|truncatewords:30 }}
+      <a href="{% url 'blog:post_detail' post.id %}">Читать далее...</a>
     {% endif %}
   </p>
-  {% if not full_text %}
-    <a href="{% url 'blog:post_detail' post.id %}">Читать далее...</a>
-  {% endif %}
 </article>
