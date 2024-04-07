@@ -2,7 +2,14 @@ from django.shortcuts import render
 
 from django.http import Http404
 
-posts = [
+from typing import List, Dict, Any
+
+from collections import defaultdict
+
+Post = Dict[str, Any]
+PostsList = List[Post]
+
+posts: PostsList = [
     {
         'id': 0,
         'location': 'Остров отчаянья',
@@ -45,30 +52,30 @@ posts = [
     },
 ]
 
-posts_dict = {post['id']: post for post in posts}
+posts_dict: Dict[int, Post] = {post['id']: post for post in posts}
+
+category_to_posts: Dict[str, List[Post]] = defaultdict(list)
+for post in posts:
+    category_to_posts[post['category']].append(post)
 
 
 def index(request):
     """Главная страница / Лента записей"""
-    posts_reversed = list(reversed(posts))
-    context = {'posts': posts_reversed}
+    context = {'posts': reversed(posts)}
     return render(request, 'blog/index.html', context)
 
 
 def post_detail(request, id):
     """Отображение полного описания выбранной записи"""
-    try:
-        post = posts_dict[id]
-    except KeyError:
+    post = posts_dict.get(id)
+    if post is None:
         raise Http404('Вы указали неверный id')
-
     context = {'post': post}
     return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
     """Отображение публикаций категории"""
-    sorted_posts = [post for post in posts_dict.values() if post['category']
-                    == category_slug]
+    sorted_posts = category_to_posts.get(category_slug, [])
     context = {'category': category_slug, 'posts': sorted_posts}
     return render(request, 'blog/category.html', context)
