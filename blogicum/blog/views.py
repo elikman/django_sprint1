@@ -49,7 +49,7 @@ posts: PostsList = [
     },
 ]
 
-posts_dict: dict[int, Post] = {post['id']: post for post in posts}
+POSTS_DICT: dict[int, Post] = {post['id']: post for post in posts}
 
 category_to_posts: defaultdict[str, list[Post]] = defaultdict(list)
 for post in posts:
@@ -64,7 +64,7 @@ def index(request):
 
 def post_detail(request, id: int):
     """Отображение полного описания выбранной записи"""
-    post = posts_dict.get(id)
+    post = POSTS_DICT.get(id)
     if post is None:
         raise Http404('Вы указали неверный id')
     context = {'post': post}
