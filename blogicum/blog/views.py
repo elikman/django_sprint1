@@ -1,13 +1,10 @@
-from django.shortcuts import render
-
-from django.http import Http404
-
-from typing import List, Dict, Any
-
 from collections import defaultdict
 
-Post = Dict[str, Any]
-PostsList = List[Post]
+from django.shortcuts import render
+from django.http import Http404
+
+Post = dict[str, any]
+PostsList = list[Post]
 
 posts: PostsList = [
     {
@@ -52,9 +49,9 @@ posts: PostsList = [
     },
 ]
 
-posts_dict: Dict[int, Post] = {post['id']: post for post in posts}
+posts_dict: dict[int, Post] = {post['id']: post for post in posts}
 
-category_to_posts: Dict[str, List[Post]] = defaultdict(list)
+category_to_posts: defaultdict[str, list[Post]] = defaultdict(list)
 for post in posts:
     category_to_posts[post['category']].append(post)
 
@@ -65,7 +62,7 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-def post_detail(request, id):
+def post_detail(request, id: int):
     """Отображение полного описания выбранной записи"""
     post = posts_dict.get(id)
     if post is None:
@@ -74,8 +71,8 @@ def post_detail(request, id):
     return render(request, 'blog/detail.html', context)
 
 
-def category_posts(request, category_slug):
+def category_posts(request, category_slug: str):
     """Отображение публикаций категории"""
-    sorted_posts = category_to_posts.get(category_slug, [])
+    sorted_posts = category_to_posts[category_slug]
     context = {'category': category_slug, 'posts': sorted_posts}
     return render(request, 'blog/category.html', context)
